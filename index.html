@@ -1,0 +1,98 @@
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#090d18">
+<title>AI Studio</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#090d18;color:#f4f5ff;font-family:Arial,sans-serif}
+header{padding:18px;background:#111827;border-bottom:1px solid #29354a;font-size:22px;font-weight:bold}
+main{max-width:700px;margin:auto;padding:18px}
+h1{font-size:27px}
+p{color:#aab5ca;line-height:1.5}
+.tabs{display:flex;gap:8px;margin:20px 0}
+button,select,textarea{font:inherit;border-radius:12px}
+button{border:1px solid #35435d;background:#182337;color:white;padding:13px;cursor:pointer}
+.tab.active,.generate{background:linear-gradient(110deg,#873bff,#245bff);border:0}
+textarea{width:100%;height:150px;background:#0d1524;border:1px solid #35435d;color:white;padding:14px;resize:vertical}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}
+label{display:block;font-size:14px;margin-bottom:8px;color:#cdd5e6}
+select{width:100%;padding:13px;background:#121e30;color:white;border:1px solid #35435d}
+.card{background:#111a29;border:1px solid #29354a;border-radius:17px;padding:17px;margin:15px 0}
+.generate{width:100%;padding:17px;font-weight:bold;font-size:17px;margin-top:20px}
+.status{color:#aab5ca;font-size:13px}
+nav{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;background:#0d1422;padding:10px;border-top:1px solid #29354a}
+nav button{border:0;background:transparent;font-size:12px}
+main{padding-bottom:90px}
+@media(max-width:400px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>▶ AI Studio <span style="font-size:12px;color:#aab5ca"> · Kendi yapay zekân</span></header>
+<main>
+<section id="video">
+<h1>Ne üretmek istiyorsun?</h1>
+<p>Fikrini yaz, modelini seç ve kendi video stüdyonu hazırla.</p>
+<div class="tabs">
+<button class="tab active" onclick="mode('text',this)">Metinden video</button>
+<button class="tab" onclick="mode('image',this)">Görselden video</button>
+</div>
+<div class="card">
+<label for="prompt">Video açıklaması</label>
+<textarea id="prompt" placeholder="Örnek: Gece şehirde ilerleyen spor motosiklet, sinematik kamera, yağmur yansımaları..."></textarea>
+<div id="upload" hidden style="margin-top:12px">
+<label>Görsel seç</label><input type="file" accept="image/*">
+</div>
+<div class="grid">
+<div><label>Model</label><select><option>Otomatik</option><option>Wan</option><option>LTX-Video</option><option>HunyuanVideo</option></select></div>
+<div><label>Süre</label><select><option>5 saniye</option><option>8 saniye</option><option>10 saniye</option></select></div>
+<div><label>Çözünürlük</label><select><option>720p</option><option>480p</option><option>1080p</option></select></div>
+<div><label>Stil</label><select><option>Gerçekçi</option><option>Sinematik</option><option>Anime</option><option>Fantastik</option></select></div>
+</div>
+<button class="generate" onclick="generate()">▶ Video üret</button>
+<p class="status" id="status">● GPU bağlantısı bekleniyor</p>
+</div>
+<div class="card">
+<strong>Hızlı fikirler</strong>
+<div class="tabs" style="flex-wrap:wrap">
+<button onclick="example('Sinematik bir aksiyon sahnesi, iki kahraman harap bir şehirde karşı karşıya.')">Aksiyon</button>
+<button onclick="example('Gün batımında sahil yolunda ilerleyen spor motosiklet.')">Motosiklet</button>
+<button onclick="example('Sisli dağların üzerinde yükselen fantastik bir kale.')">Fantastik</button>
+<button onclick="example('Neon ışıklı fütüristik şehirde yürüyen anime karakteri.')">Anime</button>
+</div>
+</div>
+</section>
+<section id="chat" hidden>
+<h1>AI Sohbet</h1><div class="card"><p>Sohbet motoru henüz bağlanmadı. Sonraki aşamada bağlayacağız.</p><textarea placeholder="Mesajını yaz..."></textarea></div>
+</section>
+<section id="library" hidden>
+<h1>Üretimlerim</h1><div class="card"><p>Oluşturduğun videolar burada gösterilecek. Henüz GPU bağlantısı yok.</p></div>
+</section>
+</main>
+<nav>
+<button onclick="page('video')">✦ Üret</button>
+<button onclick="page('chat')">☏ Sohbet</button>
+<button onclick="page('library')">▧ Üretimler</button>
+</nav>
+<script>
+function mode(m,b){
+document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+b.classList.add('active');
+document.getElementById('upload').hidden=m!=='image';
+}
+function example(t){document.getElementById('prompt').value=t}
+function generate(){
+if(!document.getElementById('prompt').value.trim()){alert('Önce video açıklamasını yaz.');return}
+document.getElementById('status').textContent='Arayüz hazır. Gerçek üretim için GPU sunucusu bağlanmalı.';
+alert('Video motoru henüz bağlanmadı. Sonraki adımda GPU bağlantısını kuracağız.')
+}
+function page(id){
+['video','chat','library'].forEach(x=>document.getElementById(x).hidden=x!==id);
+window.scrollTo(0,0)
+}
+</script>
+</body>
+</html>
